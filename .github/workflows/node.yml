@@ -1,0 +1,26 @@
+# Tên Workflow
+name: NASA Project CI
+# Mỗi khi code được push lên branch master
+# Và mỗi khi có pull request gửi tới branch master
+# Thì thực hiện workflow
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js version 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      - run: npm install
+      # Chạy script để build Client folder
+      - run: npm run build --prefix client
+#   deploy:
+# Chỉ khi nào build xong thì mới deploy
+# Tránh trường hợp build và deploy chạy song song
+# needs: build
