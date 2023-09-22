@@ -10,16 +10,22 @@ on:
     branches: [main]
 jobs:
   build:
+    env:
+      CI: true
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js version 20
+      - name: Use Node.js version ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: ${{ matrix.node-version }}
       - run: npm install
       # Chạy script để build Client folder
       - run: npm run build --prefix client
+      - run: npm test
 #   deploy:
 # Chỉ khi nào build xong thì mới deploy
 # Tránh trường hợp build và deploy chạy song song
